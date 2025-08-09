@@ -991,6 +991,10 @@ def init_db():
         db.create_all()
         print("Database initialized!")
 
+# Create tables on first run
+with app.app_context():
+    db.create_all()
+    print("Database tables created!")
+
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
