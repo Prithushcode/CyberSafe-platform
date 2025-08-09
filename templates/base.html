@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cybersecurity Awareness Platform{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        {% if request.endpoint not in ['login', 'register'] %}
+        <header>
+            <h1>CyberSafe Training Platform</h1>
+            {% if current_user.is_authenticated %}
+            <nav>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+                
+                <div class="user-dropdown">
+                    <button class="user-menu-btn">
+                        👤 {{ current_user.username }}
+                    </button>
+                    <div class="dropdown-content">
+                        <div class="user-stats">
+                            <h4>Your Progress</h4>
+                            {% if initial_score is defined and final_score is defined %}
+                                <p>Initial Score: <strong>{{ initial_score }}/10</strong></p>
+                                <p>Final Score: <strong>{{ final_score }}/10</strong></p>
+                                <p>Improvement: <strong>+{{ final_score - initial_score }}</strong></p>
+                            {% else %}
+                                <p>Complete assessments to see scores</p>
+                            {% endif %}
+                            
+                            <h4>Badges Earned</h4>
+                            <div class="dropdown-badges">
+                                {% if badges is defined %}
+                                    {% if badges.bronze %}<span title="Bronze">🥉</span>{% endif %}
+                                    {% if badges.silver %}<span title="Silver">🥈</span>{% endif %}
+                                    {% if badges.gold %}<span title="Gold">🥇</span>{% endif %}
+                                    {% if badges.diamond %}<span title="Diamond">💎</span>{% endif %}
+                                {% else %}
+                                    <p>No badges yet</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            {% else %}
+            <nav>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            </nav>
+            {% endif %}
+        </header>
+        {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Cybersecurity Awareness Platform - Master's Dissertation Project</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>

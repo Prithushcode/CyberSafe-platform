@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}Results & Feedback - CyberSafe{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <!-- Results Section -->
+    <div class="results-section">
+        <h2>🎊 Congratulations! You've Completed CyberSafe Training</h2>
+        
+        <div class="score-comparison">
+            <div class="score-card initial">
+                <h3>Initial Score</h3>
+                <div class="score-display">{{ initial_score }}/10</div>
+                <p>Before Training</p>
+            </div>
+            
+            <div class="improvement-arrow">
+                {% if improvement > 0 %}
+                    <span class="arrow-up">⬆️</span>
+                {% elif improvement < 0 %}
+                    <span class="arrow-down">⬇️</span>
+                {% else %}
+                    <span class="arrow-same">➡️</span>
+                {% endif %}
+            </div>
+            
+            <div class="score-card final">
+                <h3>Final Score</h3>
+                <div class="score-display">{{ final_score }}/10</div>
+                <p>After Training</p>
+            </div>
+        </div>
+        
+        <div class="improvement-summary">
+            {% if improvement > 0 %}
+                <h3 class="positive success-animation">📈 Great job! You improved by {{ improvement }} points ({{ "%.1f"|format(improvement_percent) }}%)</h3>
+                <p>Your cybersecurity awareness has significantly increased!</p>
+                <div class="confetti-container">
+                    <span class="confetti">🎉</span>
+                    <span class="confetti">🎊</span>
+                    <span class="confetti">✨</span>
+                    <span class="confetti">🌟</span>
+                </div>
+            {% elif improvement == 0 %}
+                <h3 class="neutral">➡️ Your score remained the same</h3>
+                <p>You maintained your knowledge level throughout the training.</p>
+            {% else %}
+                <h3 class="negative">📉 Your score decreased by {{ -improvement }} points</h3>
+                <p>Consider reviewing the materials again to reinforce your learning.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Feedback Section -->
+    <div class="feedback-section">
+        <h2>📝 Your Feedback Matters</h2>
+        <p>Please help us improve by answering these quick questions:</p>
+        
+        <form method="POST" action="{{ url_for('submit_feedback') }}" id="feedbackForm">
+            <div class="feedback-question">
+                <h4>1. Was the platform easy to use?</h4>
+                <div class="feedback-options">
+                    <label class="feedback-option">
+                        <input type="radio" name="ease_of_use" value="yes" required>
+                        <span>😊 Yes</span>
+                    </label>
+                    <label class="feedback-option">
+                        <input type="radio" name="ease_of_use" value="neutral" required>
+                        <span>😐 Neutral</span>
+                    </label>
+                    <label class="feedback-option">
+                        <input type="radio" name="ease_of_use" value="no" required>
+                        <span>😕 No</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="feedback-question">
+                <h4>2. Do you feel more confident about cybersecurity now?</h4>
+                <div class="feedback-options">
+                    <label class="feedback-option">
+                        <input type="radio" name="confidence_level" value="yes" required>
+                        <span>💪 Yes</span>
+                    </label>
+                    <label class="feedback-option">
+                        <input type="radio" name="confidence_level" value="neutral" required>
+                        <span>🤷 Neutral</span>
+                    </label>
+                    <label class="feedback-option">
+                        <input type="radio" name="confidence_level" value="no" required>
+                        <span>❌ No</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit Feedback & Complete</button>
+        </form>
+    </div>
+</div>
+
+<style>
+.results-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.results-section, .feedback-section {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.score-comparison {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin: 3rem 0;
+}
+
+.score-card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.score-card:hover {
+    transform: translateY(-5px);
+}
+
+.score-card.initial {
+    border: 3px solid #6c757d;
+}
+
+.score-card.final {
+    border: 3px solid var(--primary-color);
+}
+
+.score-display {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 1rem 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.improvement-arrow {
+    font-size: 3rem;
+    animation: bounce 2s infinite;
+}
+
+.improvement-summary {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-top: 2rem;
+}
+
+.improvement-summary.positive {
+    background: #d4edda;
+    color: #155724;
+}
+
+.improvement-summary h3.positive {
+    color: #155724;
+}
+
+.improvement-summary h3.neutral {
+    color: #856404;
+}
+
+.improvement-summary h3.negative {
+    color: #721c24;
+}
+
+.feedback-question {
+    margin: 2rem 0;
+}
+
+.feedback-question h4 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.feedback-options {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.feedback-option {
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #f8f9fa;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.feedback-option:hover {
+    background: var(--light-bg);
+    transform: translateY(-2px);
+}
+
+.feedback-option input[type="radio"] {
+    display: none;
+}
+
+.feedback-option input[type="radio"]:checked + span {
+    font-weight: bold;
+}
+
+.feedback-option input[type="radio"]:checked ~ .feedback-option {
+    border-color: var(--primary-color);
+    background: var(--light-bg);
+}
+
+.feedback-option span {
+    font-size: 1.1rem;
+}
+
+/* Animation for checked feedback */
+.feedback-option:has(input:checked) {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+#feedbackForm .btn {
+    margin-top: 2rem;
+    width: 100%;
+}
+
+/* Success animations */
+.success-animation {
+    animation: success-bounce 0.6s ease-out;
+}
+
+@keyframes success-bounce {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.confetti-container {
+    position: relative;
+    height: 50px;
+}
+
+.confetti {
+    position: absolute;
+    font-size: 2rem;
+    animation: confetti-fall 3s ease-in-out infinite;
+}
+
+.confetti:nth-child(1) { left: 20%; animation-delay: 0s; }
+.confetti:nth-child(2) { left: 40%; animation-delay: 0.5s; }
+.confetti:nth-child(3) { left: 60%; animation-delay: 1s; }
+.confetti:nth-child(4) { left: 80%; animation-delay: 1.5s; }
+
+@keyframes confetti-fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(50px) rotate(360deg); opacity: 0; }
+}
+
+/* Privacy note styling */
+.privacy-note {
+    color: #666;
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-top: 1rem;
+    opacity: 0.8;
+}
+</style>
+
+<script>
+// Add animation when feedback is selected
+document.querySelectorAll('.feedback-option').forEach(option => {
+    option.addEventListener('click', function() {
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            this.style.transform = 'scale(1)';
+        }, 100);
+    });
+});
+</script>
+{% endblock %}

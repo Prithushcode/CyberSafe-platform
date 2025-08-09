@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - CyberSafe{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <h2>{{ title }}</h2>
+    <p>Answer all 10 questions to assess your cybersecurity knowledge.</p>
+    <p class="privacy-note">🔒 Non-sensitive and anonymous data collection for research purposes only</p>
+    
+    <form method="POST" action="{{ url_for('submit_quiz') }}" id="quizForm">
+        <input type="hidden" name="quiz_type" value="{{ quiz_type }}">
+        
+        {% for question in questions %}
+        <div class="question" data-question="{{ question.id }}">
+            <h3>Question {{ question.id }}: {{ question.question }}</h3>
+            
+            {% for option, text in question.options.items() %}
+            <div class="option-wrapper">
+                <input type="radio" id="q{{ question.id }}_{{ option }}" 
+                       name="question_{{ question.id }}" value="{{ option }}" required>
+                <label for="q{{ question.id }}_{{ option }}">
+                    {{ option }}. {{ text }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+            Submit Quiz
+        </button>
+    </form>
+</div>
+
+<style>
+.option-wrapper {
+    margin: 0.5rem 0;
+}
+
+.option-wrapper input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.option-wrapper label {
+    display: inline-block;
+    cursor: pointer;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.option-wrapper:hover label {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+</style>
+
+<script>
+// Simple form validation
+document.getElementById('quizForm').addEventListener('submit', function(e) {
+    const questions = document.querySelectorAll('.question');
+    let allAnswered = true;
+    
+    questions.forEach(q => {
+        const inputs = q.querySelectorAll('input[type="radio"]');
+        const answered = Array.from(inputs).some(input => input.checked);
+        if (!answered) {
+            allAnswered = false;
+            q.style.border = '2px solid red';
+        } else {
+            q.style.border = 'none';
+        }
+    });
+    
+    if (!allAnswered) {
+        e.preventDefault();
+        alert('Please answer all questions before submitting!');
+    }
+});
+</script>
+{% endblock %}

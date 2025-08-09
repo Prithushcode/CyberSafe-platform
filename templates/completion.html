@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Thank You - CyberSafe{% endblock %}
+
+{% block content %}
+<div class="completion-container">
+    <div class="completion-content">
+        <h1 class="celebration-text">🎉 Congratulations!</h1>
+        <h2>Thank you for your support!</h2>
+        
+        <p class="completion-message">
+            You have successfully completed the CyberSafe Training Program. 
+            We hope you learned valuable cybersecurity skills that will help 
+            keep you safer online.
+        </p>
+        
+        <div class="completion-actions">
+            <p>📚 You can review the learning content at any time</p>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                Go to Dashboard
+            </a>
+        </div>
+        
+        <div class="final-tips">
+            <h3>Remember:</h3>
+            <ul>
+                <li>Stay vigilant against phishing emails</li>
+                <li>Use strong, unique passwords</li>
+                <li>Keep your software updated</li>
+                <li>Think before you click!</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+.completion-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.completion-content {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+}
+
+.celebration-text {
+    font-size: 3rem;
+    color: var(--primary-color);
+    animation: celebration 1s ease-out;
+}
+
+@keyframes celebration {
+    0% { transform: scale(0.5) rotate(-180deg); opacity: 0; }
+    50% { transform: scale(1.1) rotate(90deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.completion-message {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #555;
+    margin: 2rem 0;
+}
+
+.final-tips {
+    text-align: left;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.final-tips ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.final-tips li {
+    padding: 0.5rem 0;
+}
+
+.final-tips li::before {
+    content: '✓ ';
+    color: var(--success-color);
+    font-weight: bold;
+}
+</style>
+{% endblock %}

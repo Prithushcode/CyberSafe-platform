@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login - CyberSafe{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>🔐 Admin Access</h2>
+    <p>Enter admin key to access dashboard</p>
+    
+    <form method="POST" class="auth-form">
+        <div class="form-group">
+            <label for="admin_key">Admin Key</label>
+            <input type="password" id="admin_key" name="admin_key" required 
+                   placeholder="Enter admin key">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Access Admin Panel</button>
+    </form>
+    
+    <p class="auth-link">
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Task {{ task_id }}: {{ task.title }} - CyberSafe{% endblock %}
+
+{% block content %}
+<div class="task-container">
+    <h2>Module {{ task_id }}: {{ task.title }}</h2>
+    
+    {% if show_content %}
+        <!-- Learning Content -->
+        <div class="task-content">
+            <h3>📚 Learn</h3>
+            <p>{{ task.content }}</p>
+            
+            <div class="task-navigation">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                <a href="{{ url_for('task_exercise', task_id=task_id) }}" class="btn btn-primary">Start Exercise →</a>
+            </div>
+        </div>
+    {% else %}
+        <!-- Exercise Questions -->
+        <div class="task-exercise">
+            <h3>📝 Practice Questions</h3>
+            
+            <form id="exerciseForm" method="POST" action="{{ url_for('complete_task', task_id=task_id) }}">
+                {% for idx, question in enumerate(task.questions) %}
+                <div class="exercise-question" data-correct="{{ question.correct }}">
+                    <h4>Question {{ idx + 1 }}: {{ question.q }}</h4>
+                    
+                    {% for option, text in question.options.items() %}
+                    <div class="option">
+                        <input type="radio" name="q{{ idx }}" value="{{ option }}" 
+                               id="q{{ idx }}_{{ option }}" required>
+                        <label for="q{{ idx }}_{{ option }}">{{ option }}. {{ text }}</label>
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="feedback" style="display: none;">
+                        <p class="correct-feedback">{{ question.feedback.correct }}</p>
+                        <p class="wrong-feedback">{{ question.feedback.wrong }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <div class="task-navigation">
+                    <button type="button" id="checkAnswers" class="btn btn-secondary">Check Answers</button>
+                    <button type="button" id="continueBtn" class="btn btn-primary" style="display: none;">
+                        Continue →
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Congratulations Message -->
+            <div id="congratsMessage" style="display: none;">
+                <div class="congrats-content">
+                    <h2>🎉 Nailed it!</h2>
+                    <p>That's a great try! You've completed Module {{ task_id }}.</p>
+                    <form method="POST" action="{{ url_for('complete_task', task_id=task_id) }}">
+                        <button type="submit" class="btn btn-primary">Back to Dashboard →</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.task-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+}
+
+.task-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+    white-space: pre-line;
+    margin: 1.5rem 0;
+}
+
+.task-navigation {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.exercise-question {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.option {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.option:hover {
+    background: #e9ecef;
+}
+
+.option.correct {
+    background: #d4edda;
+    border: 2px solid #28a745;
+}
+
+.option.wrong {
+    background: #f8d7da;
+    border: 2px solid #dc3545;
+}
+
+.feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.feedback.show-correct {
+    background: #d4edda;
+    color: #155724;
+}
+
+.feedback.show-wrong {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.congrats-content {
+    text-align: center;
+    padding: 3rem;
+    animation: zoomIn 0.5s ease-out;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.congrats-content h2 {
+    color: var(--success-color);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.congrats-content p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.completed-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: #28a745;
+    color: white;
+    border-radius: 25px;
+    font-weight: 600;
+}
+
+.task-completed-notice {
+    background: #d4edda;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    border: 2px solid #28a745;
+}
+
+.task-completed-notice h3 {
+    color: #155724;
+    margin-bottom: 1rem;
+}
+</style>
+
+<script>
+document.getElementById('checkAnswers')?.addEventListener('click', function() {
+    const questions = document.querySelectorAll('.exercise-question');
+    let allCorrect = true;
+    
+    questions.forEach((q, idx) => {
+        const correct = q.dataset.correct;
+        const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+        const feedback = q.querySelector('.feedback');
+        
+        if (selected) {
+            const options = q.querySelectorAll('.option');
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'wrong');
+                const input = opt.querySelector('input');
+                if (input.value === correct) {
+                    opt.classList.add('correct');
+                } else if (input.checked) {
+                    opt.classList.add('wrong');
+                    allCorrect = false;
+                }
+            });
+            
+            feedback.style.display = 'block';
+            if (selected.value === correct) {
+                feedback.classList.add('show-correct');
+                feedback.innerHTML = feedback.querySelector('.correct-feedback').textContent;
+            } else {
+                feedback.classList.add('show-wrong');
+                feedback.innerHTML = feedback.querySelector('.wrong-feedback').textContent;
+            }
+        }
+    });
+    
+    // Show continue button after checking
+    this.style.display = 'none';
+    document.getElementById('continueBtn').style.display = 'inline-block';
+});
+
+// Handle continue button click
+document.getElementById('continueBtn')?.addEventListener('click', function() {
+    document.querySelector('.task-exercise form').style.display = 'none';
+    document.getElementById('congratsMessage').style.display = 'block';
+});
+</script>
+{% endblock %}

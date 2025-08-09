@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - CyberSafe{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <h2>🔐 Admin Dashboard</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Users</h3>
+            <p class="stat-number">{{ total_users }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Initial Quiz Completed</h3>
+            <p class="stat-number">{{ completed_initial }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Final Quiz Completed</h3>
+            <p class="stat-number">{{ completed_final }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Feedback Submitted</h3>
+            <p class="stat-number">{{ completed_feedback }}</p>
+        </div>
+    </div>
+    
+    <div class="export-section">
+        <h3>📊 Export Data</h3>
+        <p>Download all user data for analysis:</p>
+        <a href="{{ url_for('export_data') }}" class="btn btn-primary">
+            Download CSV Export
+        </a>
+    </div>
+</div>
+
+<style>
+.admin-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.stat-card h3 {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.export-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.export-section h3 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+</style>
+{% endblock %}

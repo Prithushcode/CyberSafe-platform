@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - CyberSafe{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h2>🛡️ CyberSafe Learning Dashboard</h2>
+    
+    {% if not initial_quiz %}
+        <div class="welcome-box">
+            <h3>Welcome to CyberSafe Training!</h3>
+            <p>Start your cybersecurity awareness journey by taking the initial assessment quiz. This will help us understand your current knowledge level and track your improvement.</p>
+            <a href="{{ url_for('take_initial_quiz') }}" class="btn btn-primary">
+                Take Initial Assessment Quiz
+            </a>
+        </div>
+    {% else %}
+        <div class="progress-section">
+            <h3>Your Learning Progress</h3>
+            
+            <!-- Score Display -->
+            <div style="display: flex; justify-content: space-around; margin: 2rem 0;">
+                <div style="text-align: center;">
+                    <h4>Initial Quiz Score</h4>
+                    <p style="font-size: 2rem; color: var(--primary-color); font-weight: bold;">
+                        {{ initial_quiz.score }}/10
+                    </p>
+                </div>
+                <div style="text-align: center;">
+                    <h4>Progress</h4>
+                    <p style="font-size: 2rem; color: var(--success-color); font-weight: bold;">
+                        {{ completion_percentage }}%
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: {{ completion_percentage }}%;">
+                    {% if completion_percentage > 0 %}
+                        {{ completion_percentage }}% Complete
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Badges -->
+            <div class="badges-container">
+                <div class="badge bronze {% if badges.bronze %}earned{% endif %}" 
+                     title="Complete 3 tasks">
+                    🥉
+                </div>
+                <div class="badge silver {% if badges.silver %}earned{% endif %}"
+                     title="Complete 6 tasks">
+                    🥈
+                </div>
+                <div class="badge gold {% if badges.gold %}earned{% endif %}"
+                     title="Complete 10 tasks">
+                    🥇
+                </div>
+                <div class="badge diamond {% if badges.diamond %}earned{% endif %}"
+                     title="Improve by 30% in final quiz">
+                    💎
+                </div>
+            </div>
+            
+            <!-- Learning Tasks -->
+            <div class="tasks-section">
+                <h3>Learning Modules</h3>
+                <p>Complete all 10 modules to unlock the final assessment.</p>
+                
+                <div class="tasks-grid">
+                    {% for i in range(1, 11) %}
+                        {% set is_completed = i|string in (progress.completed_tasks.split(',') if progress.completed_tasks else []) %}
+                        {% set is_current = i == progress.current_task %}
+                        
+                        <div class="task-card {% if is_completed %}completed{% elif is_current %}current{% else %}locked{% endif %}">
+                            {% if is_completed %}
+                                <span class="task-status">✓</span>
+                            {% elif is_current %}
+                                <a href="{{ url_for('task', task_id=i) }}" class="task-link">
+                                    Start Task {{ i }}
+                                </a>
+                            {% else %}
+                                <span class="task-locked">🔒 Task {{ i }}</span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Add this after the tasks-grid section -->
+{% if completion_percentage == 100 and has_taken_final %}
+    <div class="content-review-section">
+        <h3>📚 Review Learning Materials</h3>
+        <p>You can review any module content at any time:</p>
+        <div class="review-links">
+            {% for i in range(1, 11) %}
+                <a href="{{ url_for('task', task_id=i) }}" class="review-link">
+                    Module {{ i }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+                
+                {% if completion_percentage == 100 %}
+                    {% if not has_taken_final %}
+                        <div class="final-quiz-section pulse-animation">
+                            <h3>🎯 Ready for Final Assessment!</h3>
+                            <p>You've completed all learning modules. Take the final quiz to see how much you've improved!</p>
+                            <a href="{{ url_for('final_quiz') }}" class="btn btn-primary btn-glow">
+                                Take Final Assessment
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="final-quiz-section completed">
+                            <h3>✅ Final Assessment Completed!</h3>
+                            <p>You've finished all tasks and assessments. Great job!</p>
+                            <a href="{{ url_for('results') }}" class="btn btn-secondary">
+                                View Your Results
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.task-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+}
+
+.task-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.task-card:hover::before {
+    transform: scaleX(1);
+}
+
+.task-card.completed {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-color: #4caf50;
+}
+
+.task-card.current {
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    border-color: #ff9800;
+    animation: subtle-glow 2s ease-in-out infinite;
+}
+
+@keyframes subtle-glow {
+    0%, 100% {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    50% {
+        box-shadow: 0 4px 16px rgba(255, 152, 0, 0.3);
+    }
+}
+
+.task-card.locked {
+    background: #f5f5f5;
+    color: #9e9e9e;
+}
+
+.task-status {
+    font-size: 2rem;
+    color: #4caf50;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.task-link {
+    display: inline-block;
+    color: #ff9800;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.task-link:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 152, 0, 0.1);
+}
+
+.completed-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #2e7d32;
+    transition: all 0.3s ease;
+}
+
+.completed-link:hover {
+    transform: translateY(-2px);
+}
+
+.completed-link span:last-child {
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+    font-weight: 500;
+}
+
+.task-card.completed:hover {
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+.task-locked {
+    color: #9e9e9e;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.final-quiz-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #ffe0b2, #ffcc80);
+    border-radius: 15px;
+    text-align: center;
+}
+
+.final-quiz-section h3 {
+    color: #e65100;
+    margin-bottom: 1rem;
+}
+
+.progress-section h3 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.content-review-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+}
+
+.review-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.review-link {
+    padding: 0.5rem 1rem;
+    background: #e3f2fd;
+    color: #1976d2;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.review-link:hover {
+    background: #1976d2;
+    color: white;
+    transform: translateY(-2px);
+}
+</style>
+
+<script>
+// Animate progress bar on load
+window.addEventListener('load', function() {
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) {
+        setTimeout(() => {
+            progressBar.style.width = '{{ completion_percentage }}%';
+        }, 300);
+    }
+    
+    // Animate badges
+    const badges = document.querySelectorAll('.badge.earned');
+    badges.forEach((badge, index) => {
+        setTimeout(() => {
+            badge.classList.add('animate');
+        }, 500 + (index * 200));
+    });
+});
+</script>
+{% if current_user.username in ['admin', 'researcher'] %}
+<div style="text-align: center; margin-top: 3rem;">
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+        🔐 Admin Panel
+    </a>
+</div>
+{% endif %}
+{% endblock %}
