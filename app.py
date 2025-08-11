@@ -371,8 +371,10 @@ def submit_quiz():
     db.session.commit()
     
     if quiz_type == 'initial':
-     flash(f'Initial quiz completed! Your score: {score}/10', 'success')
-     return redirect(url_for('dashboard'))
+     progress = UserProgress.query.filter_by(user_id=current_user.id).first()
+     if progress and progress.current_task == 0:
+        progress.current_task = 1
+        db.session.commit()
     else:
      flash(f'Final quiz completed! Your score: {score}/10', 'success')
     return redirect(url_for('results'))
