@@ -774,7 +774,7 @@ def task_exercise(task_id):
     if str(task_id) in completed_tasks:
         flash('You have already completed this task. You can review the content.', 'info')
         return redirect(url_for('task', task_id=task_id))
-    
+        #j
     task_data = TASKS.get(task_id, None)
     if not task_data:
         return redirect(url_for('dashboard'))
