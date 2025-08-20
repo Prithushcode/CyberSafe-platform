@@ -23,21 +23,21 @@
             <h3>📝 Practice Questions</h3>
             
             <form id="exerciseForm" method="POST" action="{{ url_for('complete_task', task_id=task_id) }}">
-                {% for idx, question in enumerate(task.questions) %}
-                <div class="exercise-question" data-correct="{{ question.correct }}">
-                    <h4>Question {{ idx + 1 }}: {{ question.q }}</h4>
-                    
-                    {% for option, text in question.options.items() %}
+                {% for item in enumerated_questions %}
+                <div class="exercise-question" data-correct="{{ item.question.correct }}">
+                    <h4>Question {{ item.index + 1 }}: {{ item.question.q }}</h4>
+
+                    {% for option, text in item.question.options.items() %}
                     <div class="option">
-                        <input type="radio" name="q{{ idx }}" value="{{ option }}" 
-                               id="q{{ idx }}_{{ option }}" required>
-                        <label for="q{{ idx }}_{{ option }}">{{ option }}. {{ text }}</label>
+                        <input type="radio" name="q{{ item.index }}" value="{{ option }}" 
+                                 id="q{{ item.index }}_{{ option }}" required>
+                        <label for="q{{ item.index }}_{{ option }}">{{ option }}. {{ text }}</label>
                     </div>
                     {% endfor %}
-                    
+
                     <div class="feedback" style="display: none;">
-                        <p class="correct-feedback">{{ question.feedback.correct }}</p>
-                        <p class="wrong-feedback">{{ question.feedback.wrong }}</p>
+                        <p class="correct-feedback">{{ item.question.feedback.correct }}</p>
+                        <p class="wrong-feedback">{{ item.question.feedback.wrong }}</p>
                     </div>
                 </div>
                 {% endfor %}
