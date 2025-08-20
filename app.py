@@ -739,7 +739,6 @@ TASKS = {
 def task(task_id):
     progress = UserProgress.query.filter_by(user_id=current_user.id).first()
     
-    # Check if task is accessible (modified to allow viewing completed content)
     completed_tasks = progress.completed_tasks.split(',') if progress.completed_tasks else []
     if task_id > progress.current_task + 1 and str(task_id) not in completed_tasks:
         flash('Complete previous tasks first!', 'error')
@@ -750,12 +749,18 @@ def task(task_id):
         flash('Task not found!', 'error')
         return redirect(url_for('dashboard'))
     
-    # Check if task is already completed
     is_completed = str(task_id) in completed_tasks
+    
+    # Create enumerated questions for template
+    enumerated_questions = []
+    if 'questions' in task_data:
+        for idx, question in enumerate(task_data['questions']):
+            enumerated_questions.append({'index': idx, 'question': question})
     
     return render_template('task.html', 
                          task_id=task_id,
                          task=task_data,
+                         enumerated_questions=enumerated_questions,
                          show_content=True,
                          is_completed=is_completed)
 
@@ -767,7 +772,6 @@ def task_exercise(task_id):
     
     # Check if task is already completed
     if str(task_id) in completed_tasks:
-        # Redirect to content view if already completed
         flash('You have already completed this task. You can review the content.', 'info')
         return redirect(url_for('task', task_id=task_id))
     
@@ -775,9 +779,16 @@ def task_exercise(task_id):
     if not task_data:
         return redirect(url_for('dashboard'))
     
+    # Create enumerated questions for template
+    enumerated_questions = []
+    if 'questions' in task_data:
+        for idx, question in enumerate(task_data['questions']):
+            enumerated_questions.append({'index': idx, 'question': question})
+    
     return render_template('task.html',
                          task_id=task_id,
                          task=task_data,
+                         enumerated_questions=enumerated_questions,
                          show_content=False,
                          is_completed=False)
 
