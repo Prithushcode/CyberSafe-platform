@@ -23,8 +23,7 @@
             <h3>📝 Practice Questions</h3>
             
             <form id="exerciseForm" method="POST" action="{{ url_for('complete_task', task_id=task_id) }}">
-                {% for question in task.questions %}
-                {{ loop.index0 }}  <!-- use this for the index -->
+                {% for idx, question in enumerate(task.questions) %}
                 <div class="exercise-question" data-correct="{{ question.correct }}">
                     <h4>Question {{ idx + 1 }}: {{ question.q }}</h4>
                     
