@@ -1,4 +1,4 @@
-// Main JavaScript file for Cybersecurity Awareness Platform
+
 
 // Auto-hide alert messages after 5 seconds
 document.addEventListener('DOMContentLoaded', function() {

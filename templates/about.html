@@ -1,0 +1,467 @@
+{% extends "base.html" %}
+
+{% block title %}About - CyberSafe{% endblock %}
+
+{% block content %}
+<div class="about-container">
+    
+    <div class="about-hero">
+        <h1>CyberSafe</h1>
+        <p class="about-subtitle">Empowering Cybersecurity Awareness Through Gamified Learning</p>
+    </div>
+
+
+    <div class="about-content">
+   
+        <section class="about-section">
+            <h2>🎯 What is CyberSafe?</h2>
+            <p>
+                CyberSafe is a web-based cybersecurity awareness training platform designed to make learning 
+                about online safety engaging and effective. Through interactive modules, assessments, and 
+                gamification elements, users develop essential skills to protect themselves from cyber threats.
+            </p>
+            
+            <div class="features-highlight">
+                <div class="feature-item">
+                    <span class="feature-icon">📚</span>
+                    <h4>10 Interactive Modules</h4>
+                    <p>Comprehensive lessons covering phishing, passwords, secure browsing, and more</p>
+                </div>
+                
+                <div class="feature-item">
+                    <span class="feature-icon">🎮</span>
+                    <h4>Gamified Learning</h4>
+                    <p>Progress tracking, badges, and achievements to motivate continued learning</p>
+                </div>
+                
+                <div class="feature-item">
+                    <span class="feature-icon">📊</span>
+                    <h4>Progress Analytics</h4>
+                    <p>Track your improvement with before/after assessments and detailed analytics</p>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="about-section">
+            <h2>🎓 Project Background</h2>
+            <p>
+                CyberSafe was developed as part of a Master's dissertation project at 
+                <strong>University of East Anglia</strong> in 2025. The research focuses on the effectiveness 
+                of gamification in cybersecurity education and addresses the growing need for accessible 
+                cybersecurity awareness training.
+            </p>
+            
+            <div class="project-stats">
+                <div class="stat-item">
+                    <h3>80-150</h3>
+                    <p>Target participants for research study</p>
+                </div>
+                <div class="stat-item">
+                    <h3>10</h3>
+                    <p>Comprehensive learning modules</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Free</h3>
+                    <p>Completely accessible platform</p>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="about-section">
+            <h2>⚙️ Technology & Features</h2>
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h4>Backend</h4>
+                    <ul>
+                        <li>Python Flask</li>
+                        <li>SQLAlchemy ORM</li>
+                        <li>PostgreSQL Database</li>
+                        <li>Flask-Login Authentication</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h4>Frontend</h4>
+                    <ul>
+                        <li>HTML5 & CSS3</li>
+                        <li>Vanilla JavaScript</li>
+                        <li>Responsive Design</li>
+                        <li>Modern UI/UX</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h4>Deployment</h4>
+                    <ul>
+                        <li>Render.com Hosting</li>
+                        <li>GitHub Version Control</li>
+                        <li>Automated Deployment</li>
+                        <li>Environment Variables</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+ 
+        <section class="about-section">
+            <h2>🔬 Research Contribution</h2>
+            <p>This platform contributes to cybersecurity education research by:</p>
+            <ul class="contribution-list">
+                <li>Demonstrating zero-budget cybersecurity education feasibility</li>
+                <li>Validating gamification effectiveness in security awareness</li>
+                <li>Providing framework for accessible e-learning platforms</li>
+                <li>Contributing to HCI principles in educational technology</li>
+            </ul>
+        </section>
+
+        <section class="about-section developer-section">
+            <h2>👨‍💻 Developer & Contact</h2>
+            <div class="developer-card">
+                <div class="developer-info">
+                    <h3>Prithush D Nair</h3>
+                    <p>MSc Student</p>
+                    <p><strong>University:</strong> University of East Anglia</p>
+                    <p><strong>Program:</strong> MSc Data Science</p>
+                    <p><strong>Year:</strong> 2025</p>
+                </div>
+                
+                <div class="contact-info">
+                    <h4>📧 Contact Information</h4>
+                    <ul class="contact-list">
+                        <li><strong>Email:</strong> <a href="mailto:dnr24cau@uea.ac.uk">dnr24cau@uea.ac.uk</a></li>
+                        <li><strong>GitHub:</strong> <a href="https://github.com/Prithushcode" target="_blank">@Prithushcode</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+ 
+        <section class="about-section">
+            <h2>🔐 Privacy & Data Ethics</h2>
+            <div class="privacy-info">
+                <p>CyberSafe is designed with privacy and ethical research practices in mind:</p>
+                <ul>
+                    <li> * Anonymous data collection for research purposes only</li>
+                    <li> * No personal identifiable information stored</li>
+                    <li> * Secure password hashing and authentication</li>
+                    <li> * HTTPS encryption for all data transmission</li>
+                    <li> * Participant consent and transparency</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <section class="about-section cta-section">
+            <h2>🚀 Ready to Get Started?</h2>
+            <p>Join our research study and improve your cybersecurity knowledge today!</p>
+            <div class="cta-buttons">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+                {% else %}
+                    <a href="{{ url_for('register') }}" class="btn btn-primary">Create Account</a>
+                    <a href="{{ url_for('login') }}" class="btn btn-secondary">Login</a>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+.about-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.about-hero {
+    text-align: center;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,249,250,0.95));
+    border-radius: 20px;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.about-hero h1 {
+    font-size: 3rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.about-subtitle {
+    font-size: 1.3rem;
+    color: #666;
+    margin: 0;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.about-section {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.about-section h2 {
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+.about-section p {
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+
+.features-highlight {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.feature-item h4 {
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+
+
+.project-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--light-bg), #e3f2fd);
+    border-radius: 15px;
+    min-width: 150px;
+}
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-item p {
+    color: #666;
+    margin: 0;
+    font-weight: 500;
+}
+
+
+/* Technology Grid */
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.tech-category {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 15px;
+}
+
+.tech-category h4 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.tech-category ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tech-category li {
+    padding: 0.3rem 0;
+    color: #555;
+}
+
+.tech-category li::before {
+    content: '▶ ';
+    color: var(--primary-color);
+    font-size: 0.8rem;
+}
+
+/* Contribution List */
+.contribution-list {
+    list-style: none;
+    padding: 0;
+}
+
+.contribution-list li {
+    padding: 0.8rem 0;
+    color: #555;
+    border-bottom: 1px solid #eee;
+}
+
+.contribution-list li::before {
+    content: '🎯 ';
+    margin-right: 0.5rem;
+}
+
+
+
+.developer-section {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9) !important;
+}
+
+.developer-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.developer-info h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.contact-list {
+    list-style: none;
+    padding: 0;
+}
+
+.contact-list li {
+    padding: 0.5rem 0;
+    color: #555;
+}
+
+.contact-list a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-list a:hover {
+    text-decoration: underline;
+}
+
+
+
+.privacy-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.privacy-info li {
+    padding: 0.5rem 0;
+    color: #555;
+}
+
+
+
+.cta-section {
+    text-align: center;
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2) !important;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .about-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .about-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .features-highlight {
+        grid-template-columns: 1fr;
+    }
+    
+    .developer-card {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .tech-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+{% endblock %}

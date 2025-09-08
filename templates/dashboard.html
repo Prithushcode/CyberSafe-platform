@@ -86,7 +86,7 @@
                         </div>
                     {% endfor %}
                 </div>
-                <!-- Add this after the tasks-grid section -->
+
 {% if completion_percentage == 100 and has_taken_final %}
     <div class="content-review-section">
         <h3>📚 Review Learning Materials</h3>
@@ -294,7 +294,7 @@
 </style>
 
 <script>
-// Animate progress bar on load
+// progress bar
 window.addEventListener('load', function() {
     const progressBar = document.querySelector('.progress-bar');
     if (progressBar) {
@@ -303,7 +303,7 @@ window.addEventListener('load', function() {
         }, 300);
     }
     
-    // Animate badges
+    //badges
     const badges = document.querySelectorAll('.badge.earned');
     badges.forEach((badge, index) => {
         setTimeout(() => {

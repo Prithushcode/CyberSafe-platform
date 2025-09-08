@@ -22,7 +22,7 @@ if os.environ.get('DATABASE_URL'):
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['DEBUG'] = False  # ADD ONLY THIS LINE
+app.config['DEBUG'] = False  
 
 # Initialize extensions
 db = SQLAlchemy(app)
@@ -167,6 +167,10 @@ def logout():
     flash('You have been logged out successfully.', 'info')
     return redirect(url_for('login'))
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
@@ -211,6 +215,7 @@ def dashboard():
                          progress=progress,
                          completion_percentage=completion_percentage,
                          badges=badges)
+
 
 # Quiz questions
 QUIZ_QUESTIONS = [
@@ -731,7 +736,7 @@ TASKS = {
             }
         ]
     }
-    # Add tasks 2-10 here following same structure
+
 }
 
 @app.route('/task/<int:task_id>')
@@ -751,7 +756,7 @@ def task(task_id):
     
     is_completed = str(task_id) in completed_tasks
     
-    # Create enumerated questions for template
+    #enumerated questions for template
     enumerated_questions = []
     if 'questions' in task_data:
         for idx, question in enumerate(task_data['questions']):
@@ -774,12 +779,12 @@ def task_exercise(task_id):
     if str(task_id) in completed_tasks:
         flash('You have already completed this task. You can review the content.', 'info')
         return redirect(url_for('task', task_id=task_id))
-        #j
+    
     task_data = TASKS.get(task_id, None)
     if not task_data:
         return redirect(url_for('dashboard'))
     
-    # Create enumerated questions for template
+    #enumerated questions for template
     enumerated_questions = []
     if 'questions' in task_data:
         for idx, question in enumerate(task_data['questions']):
@@ -803,16 +808,16 @@ def complete_task(task_id):
         completed.append(str(task_id))
         progress.completed_tasks = ','.join(completed)
         
-        # Update current_task to next task
+        # Update current task to next task
         if task_id >= progress.current_task:
-            progress.current_task = task_id + 1  # Move to next task
+            progress.current_task = task_id + 1  # for moving to next task
         
         db.session.commit()
     
     flash(f'Task {task_id} completed! Task {task_id + 1} is now unlocked.', 'success')
     return redirect(url_for('dashboard'))
 
-# Add these routes after your task routes
+
 
 @app.route('/quiz/final')
 @login_required
@@ -901,8 +906,8 @@ from flask import make_response
 @app.route('/admin/export-data')
 @login_required
 def export_data():
-    # Simple admin check - you can enhance this
-    if current_user.username not in ['admin', 'researcher']:  # Add your admin usernames
+
+    if current_user.username not in ['admin', 'researcher']:  
         flash('Access denied. Admin only.', 'error')
         return redirect(url_for('dashboard'))
     
@@ -995,7 +1000,7 @@ def admin_login():
 def admin_dashboard():
     if not session.get('is_admin'):
         return redirect(url_for('admin_login'))
-    # Admin dashboard logic
+
     return render_template('admin.html')
 
 # Initialize database

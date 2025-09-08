@@ -219,12 +219,12 @@ document.getElementById('checkAnswers')?.addEventListener('click', function() {
         }
     });
     
-    // Show continue button after checking
+
     this.style.display = 'none';
     document.getElementById('continueBtn').style.display = 'inline-block';
 });
 
-// Handle continue button click
+
 document.getElementById('continueBtn')?.addEventListener('click', function() {
     document.querySelector('.task-exercise form').style.display = 'none';
     document.getElementById('congratsMessage').style.display = 'block';
